@@ -1,0 +1,444 @@
+<%- include("../partials/header"); -%>
+<script>
+  function changeToCars(){
+    document.getElementById("drivers").hidden = true;
+    document.getElementById("driversBtn").style.backgroundColor = "#e9ecef";
+    document.getElementById("cars").hidden = false;
+    document.getElementById("carsBtn").style.backgroundColor = "#bdbfc0";
+  }
+
+  function changeToDrivers(){
+    document.getElementById("drivers").hidden = false;
+    document.getElementById("driversBtn").style.backgroundColor = "#bdbfc0";
+    document.getElementById("cars").hidden = true;
+    document.getElementById("carsBtn").style.backgroundColor = "#e9ecef";
+
+  }
+
+  function kilometersFunc(){
+    $('#kilometers').prop('required',true);
+    $('#eachEveryKilometers').prop('required',true);
+    $('#monthChecked').prop('required',false);
+    $('#eachEveryMonths').prop('required',false);
+    $('#monthChecked').val("");
+    $('#eachEveryMonths').val("");
+  }
+
+  function hoursFunc(){
+    $('#kilometers').prop('required',false);
+    $('#eachEveryKilometers').prop('required',false);
+    $('#monthChecked').prop('required',true);
+    $('#eachEveryMonths').prop('required',true);
+    $('#kilometers').val("");
+    $('#eachEveryKilometers').val("");
+  }
+
+ 
+  
+  
+</script>
+
+
+
+<div class="jumbotron jumbotron-fluid" style="margin-bottom: 0px;">
+  <div class="container">
+    <h1 class="display-4 " style="text-align:center;" >
+      <% if(currentUser.accessLvl >= 2) { %>
+        <a href="<%=squadron.id%>/managerMode" style="text-decoration: none; color: black;"> טייסת <%=squadron.name %></a>
+      <% }else{ %>
+       טייסת <%=squadron.name %>
+      <% } %>
+    </h1>
+  </div>
+</div>
+
+<div class="btn-group" role="group" style="width: 100%; margin-bottom: 2rem;">
+  <button id="carsBtn" onclick="changeToCars()" style="border: 0px ;border-radius: 0px 0px 15px 15px; background-color: #e9ecef; color: black;" type="button" class="btn btn-secondary">רכבים</button>
+  <button id="driversBtn" onclick="changeToDrivers()" style="border: 0px; border-radius: 0px 0px 15px 15px; background-color: #bdbfc0; color: black;" type="button" class="btn btn-secondary">נהגים</button>
+
+</div>
+
+<div id="drivers">
+  <div class="accordion" id="accordionExample">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h2 class="mb-0">
+          <button style="text-decoration: none;" class="btn btn-link btn-block text-right" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <span class="badge badge-danger"> <%=driverAlerts.length%> </span> פגי תוקף
+          </button>
+        </h2>
+      </div>
+      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="card-body">
+          <% driverAlerts.forEach(function(a){%>
+            <div class="alert alert-danger" style="text-align: start;" dir="rtl" role="alert">
+                <%= a %>
+            </div>
+          <% }); %>      
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <% if(currentUser.accessLvl > 1){ %>
+  <button type="button" data-toggle="collapse" href="#addDriverForm" class="btn btn-lg btn-block btn-dark"> <img src="/icons/person-lines-fill.svg" alt=""> הוסף נהג</button>
+  <div class="collapse" id="addDriverForm">
+      <form action="/squadron/addDriver/<%= squadron.name %>/<%= squadron.id %>" method="post" dir="rtl">
+          <div class="form-group">
+              <br>
+              <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">שם הנהג/ת</span>
+                <input required type="text" name="driver[name]" class="form-control" id="driverName" placeholder="שם נהג/ת">
+              </div>
+
+              <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">תאריך לידה</span>
+                <input required type="date" name="driver[age]" class="form-control" id="driverBirthDate" placeholder="גיל">
+              </div>
+              
+              <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">תוקף רישיון</span>
+                <input required type="date" name="driver[licenseExpiration]" class="form-control" id="driverLicenseExpiration" >
+              </div>
+
+              <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">תוקף רישיון צבאי</span>
+                <input required type="date" name="driver[armyLicenseExpiration]" class="form-control" id="driverArmyLicenseExpiration">
+              </div>
+
+              <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">ידני/אוטומטי</span>
+                <select required multiple class="form-control" name="driver[manualAuto]" id="manualAuto">
+                  <option>Manual</option>
+                  <option>Auto</option>
+                </select>
+              </div>
+
+              <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">דרגות רישיון</span>
+                <select required multiple class="form-control" name="driver[driverRanks]" id="driverRanks">
+                  <option>A2</option>
+                  <option>A1</option>
+                  <option>A</option>
+                  <option>B</option>
+                  <option>C1</option>
+                  <option>C</option>
+                  <option>D</option>
+                  <option>D1</option>
+                  <option>D2</option>
+                  <option>D3</option>
+                  <option>E</option>
+                  <option>1</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg btn-block">הוסף</button>
+          </div>
+      </form>
+  </div>
+  <% } %>
+  <br>
+  <div class="accordion" id="accordion">
+    <% var i = 0; %>
+    <%drivers.forEach(function(driver){ %>
+
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h2 class="mb-0">
+            <button  style="text-decoration: none;" class="btn btn-link btn-block text-right" type="button" data-toggle="collapse" data-target="#collapse<%=i%>">
+              <%=driver.name %>
+            </button>
+          </h2>
+        </div>
+      
+          <div id="collapse<%=i%>" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="<%=driver.ageNum%>" dir="rtl" readonly>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">גיל</span>
+                </div>
+              </div>
+
+              <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="<%=driver.licenseExpiration%>" dir="rtl" readonly>
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">פג תוקף רישיון</span>
+                  </div>
+              </div>
+
+              <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="<%=driver.armyLicenseExpiration%>" dir="rtl" readonly>
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">פג תוקף רישיון צבאי</span>
+                  </div>
+              </div>
+
+              <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="<%=driver.manualAuto%>" dir="rtl" readonly>
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">ידני/אוטומט</span>
+                  </div>
+              </div>
+
+              <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="<%=driver.driverRanks%>" dir="rtl" readonly>
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">דרגות רישיון</span>
+                  </div>
+              </div>
+              <div style="display: flex;">
+                  <% if(currentUser.accessLvl > 1){ %>
+                  <form style="justify-content: center; width:100%; height: 100%;" action="/driver/deleteDriver/<%=driver.id%>/<%=squadron.id%>?_method=DELETE" onsubmit="return(confirm('האם אתה בטוח?'));" method="post"><button  style="justify-content: center; width:100%;" type="submit" class="btn btn-danger">מחק</button></form>
+                  &nbsp;
+                  <% } %>
+                  <% if(currentUser.driverId === driver.id || currentUser.accessLvl > 1){ %>
+                    <a href="/driver/editDriver/<%=driver.id%>/<%=squadron.id%>" style="text-decoration: none; color: white; width: 100%; height:100%; justify-content: center; width:100%;" role="button" class="btn btn-warning">ערוך</a>
+                  <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% i++; %>
+        <% }); %>
+  </div>
+</div>
+
+<div id="cars" hidden>
+  <div class="accordion" id="accordionExample">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h2 class="mb-0">
+          <button style="text-decoration: none;" class="btn btn-link btn-block text-right" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+            <span class="badge badge-danger"> <%=carAlerts.length%> </span> פגי תוקף
+          </button>
+        </h2>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="card-body">
+            <% carAlerts.forEach(function(a){%>
+            <div class="alert alert-danger" style="text-align: start;" dir="rtl" role="alert">
+                <%= a %>
+            </div>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <% if(currentUser.accessLvl > 1){ %>
+  <button type="button" data-toggle="collapse" href="#addCarForm" class="btn btn-lg btn-block btn-dark"> <img src="/icons/car.svg" width="32em" height="32em" alt=""> הוסף רכב</button>
+  <div class="collapse" id="addCarForm">
+      <form action="/squadron/addCar/<%= squadron.name %>/<%= squadron.id %>" method="post" dir="rtl">
+          <div class="form-group">
+            <br>
+            <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+              <span class="input-group-text" id="basic-addon1">בעל הרכב</span>
+              <input required type="text" name="car[carOwner]" class="form-control" id="carOwner" placeholder="בעל הרכב">
+            </div>
+              <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">סוג הרכב </span>
+                <input required type="text" name="car[carType]" class="form-control" id="carType" placeholder="סוג הרכב">
+              </div>
+
+              <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">מספר רכב </span>
+                <input required pattern="[0-9]*" inputmode="numeric" minlength="6" maxlength="8" type="text" name="car[numberPlate]" class="form-control" id="numberPlate" placeholder="מספר רכב">
+              </div>
+
+              <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">תאריך לטסט </span>
+                <input required type="date" name="car[annualTest]" class="form-control" id="annualTest" >
+              </div>
+
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">ביקורת חורף</span>
+                <select name="car[winterCheck]" class="form-control">
+                  <option value="true">נעשה</option>
+                  <option value="false">לא נעשה</option>
+                </select>
+              </div>
+
+              <div class="container-fluid center">
+                <div style="display:flex; justify-self: end;" class="btn center container-fluid" role="group" dir="rtl">
+                  <div class="btn-group-toggle" dir="rtl" data-toggle="buttons">
+                    <label class="btn btn-primary active">
+                      <input onclick="kilometersFunc();$('#kilometerIn').prop('hidden',false); $('#hoursIn').prop('hidden',true);" type="radio" name="options" checked> קילומטרים
+                    </label>
+                    <label class="btn btn-primary">
+                      <input onclick="hoursFunc();$('#kilometerIn').prop('hidden',true); $('#hoursIn').prop('hidden',false);" type="radio" name="options"> חודשי
+                    </label>
+                  </div>
+                </div>
+              </div>
+             
+
+              <div id="kilometerIn">
+                <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                  <span class="input-group-text" id="basic-addon1">קילומטרים </span>
+                  <input required type="number" min="0" name="car[kilometers]" class="form-control" id="kilometers" placeholder="קילומטרים">  
+                </div>
+
+                <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                  <span class="input-group-text" id="basic-addon1">טיפול לקילומטר </span>
+                  <input required type="number" min="0" name="car[eachEveryKilometer]" class="form-control" id="eachEveryKilometers" placeholder="כל כמה קילומטרים מתרחש טיפול?">  
+                </div>
+              </div>
+
+              <div id="hoursIn" hidden>
+                <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                  <span class="input-group-text" id="basic-addon1">טופל בתאריך </span>
+                  <input id="monthChecked" name="car[monthChecked]" class="form-control" type="date">
+                </div>
+
+                <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                  <span class="input-group-text" id="basic-addon1">הטיפול יתבצע כל </span>
+                  <input id="eachEveryMonths" name="car[eachEveryMonths]"  class="form-control" type="number">
+                  <span class="input-group-text" id="basic-addon1">חודשים </span>
+                </div>
+              </div>
+
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">טיפול קילומטרים/שעות</span>
+                <select name="car[doneCheck]" class="form-control">
+                  <option value="true">נעשה</option>
+                  <option value="false">לא נעשה</option>
+                </select>
+              </div>
+
+              <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">הערות על הרכב </span>
+                <textarea class="form-control" name="car[notes]" id="exampleFormControlTextarea1" rows="3"></textarea>
+              </div>
+
+              <br>
+              <button type="submit" class="btn btn-primary btn-lg btn-block">הוסף</button>
+          </div>
+      </form>
+  </div>
+  <% } %>
+  <br>
+  <div class="accordion" id="accordion">
+    <% var j = 0; %>
+    <%cars.forEach(function(car){ %>
+
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h2 class="mb-0">
+            <button  style="text-decoration: none;" class="btn btn-link btn-block text-right" type="button" data-toggle="collapse" data-target="#collapse<%=j%>">
+             הרכב של <%=car.carOwner%>
+            </button>
+          </h2>
+        </div>
+      
+          <div id="collapse<%=j%>" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+
+            <div class="card-body">
+            
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="<%=car.carType%>" dir="rtl" readonly>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">סוג הרכב</span>
+                </div>
+            </div>
+
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="<%=car.numberPlate%>" dir="rtl" readonly>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">מספר רכב</span>
+                </div>
+              </div>
+
+              <div class="input-group mb-3">
+                <% if(car.winterCheck){ %>
+                  <input type="text" class="form-control" placeholder="נעשה" dir="rtl" readonly>
+                <%}else{%>
+                  <input type="text" class="form-control" placeholder="לא נעשה" dir="rtl" readonly>
+                <%}%>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">ביקורת חורף</span>
+                </div>
+            </div>
+
+              <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="<%=car.annualTest%>" dir="rtl" readonly>
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">תאריך טסט</span>
+                  </div>
+              </div>
+              <% if(car.eachEveryMonths == null){ %>
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="<%=car.kilometers%>" dir="rtl" readonly>
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">קילומטרים</span>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="<%=car.eachEveryKilometer%>" dir="rtl" readonly>
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">טיפול לקילומטר</span>
+                  </div>
+              </div>
+              <%}else{ %>
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="<%=car.monthChecked.toDateString()%>" dir="rtl" readonly>
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">טופל בתאריך</span>
+                  </div>
+                </div>
+
+              <div class="input-group mb-3">
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">חודשים</span>
+                </div>
+                <input type="text" class="form-control" placeholder="<%=car.eachEveryMonths%>" dir="rtl" readonly>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">טיפול כל</span>
+                </div>
+              </div>
+              <% }%>
+
+              <div class="input-group mb-3">
+                <% if(car.doneCheck){ %>
+                  <input type="text" class="form-control" placeholder="נעשה" dir="rtl" readonly>
+                <%}else{%>
+                  <input type="text" class="form-control" placeholder="לא נעשה" dir="rtl" readonly>
+                <%}%>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">טיפול קילומטרים/שעות</span>
+                </div>
+            </div>
+
+
+            <div  class="input-group-prepend" style="display: flex;margin-bottom: 0.5rem;">
+              <textarea readonly class="form-control" rows="3" dir="rtl"><%=car.notes%></textarea>
+              <span class="input-group-text" id="basic-addon1">הערות על הרכב </span>
+
+            </div>
+              <div style="display: flex;">
+                <% if(currentUser.accessLvl > 1){ %>
+                  <form style="justify-content: center; width:100%; height: 100%;" action="/car/deleteCar/<%=car.id%>/<%=squadron.id%>?_method=DELETE" onsubmit="return(confirm('האם אתה בטוח?'));" method="post"><button  style="justify-content: center; width:100%;" type="submit" class="btn btn-danger">מחק</button></form>
+                <% } %>
+                  &nbsp;
+                <% if(currentUser.carId === car.id || currentUser.accessLvl > 1){ %>
+                  <a href="/car/editCar/<%=car.id%>/<%=squadron.id%>" style="text-decoration: none; color: white; width: 100%; height:100%; justify-content: center; width:100%;" role="button" class="btn btn-warning">ערוך</a>
+                <% } %>
+
+                </div>
+            </div>
+          </div>
+        </div> 
+        <% j++; %>
+        <% }); %>
+  </div>
+</div>
+
+<br>
+<form hidden style="justify-content: center; width:100%; height: 100%;" action="/squadron/delete/<%=squadron.id%>?_method=DELETE" onsubmit="return(confirm('האם אתה בטוח?'));" method="post"><button  style="justify-content: center; width:100%;" type="submit" class="btn btn-danger">מחק טייסת זו</button></form>
+
+
+
+<%- include("../partials/footer"); -%>

@@ -1,0 +1,12 @@
+<%- include("../partials/header"); -%>
+<br>
+<div class="center" style="width: 100%;">
+    <form action="/squadron/createSquadron" method="POST" style="width: 100%;">
+        <input name="squadron[name]" style="text-align: right;" class="form-control" type="text" placeholder="מספר / שם הטייסת">
+        <br>
+        <button type="submit" class="btn btn-primary" style="width:100%; align-self: center;">הוסף</button>
+    </form>
+</div>
+
+
+  <%- include("../partials/footer"); -%>

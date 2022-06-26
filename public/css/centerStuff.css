@@ -1,0 +1,23 @@
+
+.center{
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.cardSquad{
+  width: 7.5rem;
+  height: 7.5rem;
+}
+
+label{
+  display: flex;
+}
+
+span.input-group-text{
+ background-color: #17a2b8;
+ color: white;
+}

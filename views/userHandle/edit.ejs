@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="heb">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- Bootstrap core CSS -->
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/js/jquery-3.6.0.min.js"  type="text/javascript"></script>
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle; 
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="/css/signin.css" rel="stylesheet">
+  </head>
+<body class="text-center">
+
+  
+<form onsubmit="return confirm('האם אתה בטוח בשינויים שביצעת?');" action="/userHandle/edit/<%=user.id%>/<%=squadron.id%>?_method=PUT" method="POST" class="form-signin">
+  <div class="container-fluid">
+
+    <!--הודעות למשתמש-->
+    <% if((error && error.length > 0) || (success && success.length>0)){ %>
+     <%if(success && success.length>0){ %>
+         <div class="alert alert-success alert-dismissible fade show" dir="rtl" style="text-align:center; padding-right: 1.25rem;" role="alert">
+     <%} if(error && error.length > 0){ %>
+         <div class="alert alert-danger alert-dismissible fade show" dir="rtl" style="text-align:center; padding-right: 1.25rem;" role="alert">
+     <% } %>
+     <% if(error && error.length > 0){ %>
+         <%=error%>
+     <%} if(success && success.length>0){ %>
+         <%=success%>
+     <% } %>
+           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+           </button>
+         </div>
+   <% } %>
+ </div>
+    
+  <img class="mb-4" src="/icons/tireB.svg" alt="" width="72" height="72">
+  <h1 class="h3 mb-3 font-weight-normal">עריכת משתמש לטייסת <%=squadron.name%></h1>
+  <label for="inputEmail" class="sr-only">שם משתמש</label>
+  <input type="text" id="inputEmail" value="<%=user.username%>" name="user[username]" class="form-control" dir="rtl" placeholder="שם משתמש" required autofocus>
+   <div class="input-group-prepend">
+    <select dir="rtl" name="user[accessLvl]" id="manager" class="form-control">
+      <option value="2">כן</option>
+      <option value="1">לא</option>
+    </select>
+    <span class="input-group-text" id="basic-addon1">מנהל טייסת</span>
+  </div>
+  <br>
+  <div id="hideManager" style="display: none;">
+    <div class="input-group-prepend">
+      <select dir="rtl" name="user[carId]" class="form-control" id="car">
+        <% if(user.carId === "NoCar"){%>
+            <option selected value="noCar">אין רכב</option>
+        <% }else{ %>
+            <option value="noCar">אין רכב</option>
+        <% } %>
+        <% cars.forEach(function(car){ %>
+            <% if(car.id === user.carId){ %>
+                <option selected value="<%=car.id%>">הרכב של <%=car.carOwner%></option>
+            <% }else{ %>
+                <option value="<%=car.id%>">הרכב של <%=car.carOwner%></option>
+            <% } %>
+        <%}); %>
+
+      </select>
+      <span class="input-group-text" id="basic-addon1">סוג רכב</span>
+    </div>
+    <br>
+
+    <div class="input-group-prepend">
+      <select dir="rtl" name="user[driverId]" class="form-control" id="driver">
+        <% drivers.forEach(function(driver){ %>
+            <% if(user.driverId === "noDriver") { %>
+                <option selected value="noDriver">אין רישיון</option>
+            <% }else{ %>
+                <option value="noDriver">אין רישיון</option>
+            <% } %>
+            <% if(user.driverId === driver.id){ %>
+                <option selected value="<%=driver.id%>">הרישיון של <%=driver.name%></option>
+            <% }else{ %>
+                <option value="<%=driver.id%>">הרישיון של <%=driver.name%></option>
+            <% } %>
+        <%}); %>
+      </select>
+      <span class="input-group-text" id="basic-addon1">הנהג הוא</span>
+    </div>
+  </div>
+    <br>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">עדכן משתמש</button>
+</form>
+
+<script>
+var accessLvl = <%=user.accessLvl %>;
+
+var managerInput = document.getElementById('manager');
+var carInput = document.getElementById('car');
+
+
+if(accessLvl == 1){
+    managerInput.value = 1;
+    document.getElementById("hideManager").style ="display:block";
+
+}else{
+    managerInput.value = 2
+}
+ 
+
+managerInput.onchange = function(){
+    console.log(managerInput.value);
+    if(managerInput.value == 2){
+      document.getElementById("hideManager").style ="display:none";
+    }else{
+      document.getElementById("hideManager").style ="display:block";
+    }
+}
+</script>
+
+<%- include("../partials/footer"); -%>

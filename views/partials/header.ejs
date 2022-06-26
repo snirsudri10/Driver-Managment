@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ניהול נהגים</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/css/centerStuff.css" type="text/css">
+</head>
+<body>
+    <div class="container-fluid container-sm">
+            <nav class="navbar navbar-dark bg-dark">
+                <a class="navbar-brand" href="/">
+                  <img src="/icons/tire.svg" width="30" height="30" alt="">
+                </a>
+                <% if(!currentUser){ %>
+                    <button type="button" class="btn btn-primary"><a href="/userHandle/signIn" style="color: white; text-decoration: none">התחבר</a> </button>
+
+                <% }else{ %>
+                    <h4 style="color: white;"><a href="/userHandle/logout" style="text-decoration: none; color: white;"> שלום <%=currentUser.username%>  </a></h4>
+                <%}%>
+            </nav>
+
+    <!--הודעות למשתמש-->
+        <% if((error && error.length > 0) || (success && success.length>0)){ %>
+            <%if(success && success.length>0){ %>
+                <div class="alert alert-success alert-dismissible fade show" dir="rtl" style="text-align:start;" role="alert">
+            <%} if(error && error.length > 0){ %>
+                <div class="alert alert-danger alert-dismissible fade show" dir="rtl" style="text-align:start;" role="alert">
+            <% } %>
+            <% if(error && error.length > 0){ %>
+                <%=error%>
+            <%} if(success && success.length>0){ %>
+                <%=success%>
+            <% } %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+        <% } %>

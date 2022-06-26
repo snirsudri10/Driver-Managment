@@ -1,0 +1,21 @@
+<%- include("../partials/header"); -%>
+
+
+
+
+<div class="jumbotron jumbotron-fluid" style="margin-bottom: 0px;">
+    <div class="container">
+      <h1 class="display-4 " style="text-align:center;" >מצב מנהל טייסת</h1>
+    </div>
+</div>
+<br>
+<a href="/userHandle/register/registerUserSquad/<%=squadronId%>" role="button" class="btn btn-info btn-lg btn-block">הוסף משתמש לטייסת</a>
+<a href="/userHandle/squadronUser/<%=squadronId%>" role="button" class="btn btn-info btn-lg btn-block">נהל את משתמשי הטייסת</a>
+<% if(currentUser.accessLvl > 2){ %>
+  <form style="margin-top: 25rem; margin-bottom: 0.5rem;" action="/squadron/delete/<%=squadronId%>?_method=DELETE" onsubmit="return(confirm('האם אתה בטוח?'));"  method="post">
+    <button type="submit" class="btn btn-danger btn-lg btn-block">מחק טייסת</button>
+  </form>
+
+<% } %>
+
+<%- include("../partials/footer"); -%>

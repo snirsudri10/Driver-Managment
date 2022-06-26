@@ -1,0 +1,50 @@
+<%- include("../partials/header"); -%>
+
+  <div class="jumbotron jumbotron-fluid" style="margin-bottom: 0px;">
+    <div class="container">
+      <h1 class="display-4 " style="text-align:center;">עדכן את הנהג</h1>
+    </div>
+  </div>
+
+  <form action="/driver/editDriver/<%=driver.id%>/<%=squadronId%>?_method=PUT" method="POST" dir="rtl">
+    <div class="form-group">
+      <br>
+      <label for="driverName" dir="rtl"></label>
+      <input required type="text" name="driver[name]" class="form-control" id="driverName" placeholder="שם נהג/ת"
+        value="<%= driver.name %>">
+        
+      <label for="driverLicenseExpiration">פג תוקף רישיון</label>
+      <input required type="date" name="driver[licenseExpiration]" class="form-control" id="driverLicenseExpiration"
+        value="<%= driver.licenseExpiration %>">
+
+      <label for="driverArmyLicenseExpiration">פג תוקף רישיון צבאי</label>
+      <input required type="date" name="driver[armyLicenseExpiration]" class="form-control"
+        id="driverArmyLicenseExpiration" value="<%= driver.armyLicenseExpiration %>">
+
+      <label for="manualAuto">ידני/אוטומטי</label>
+      <select multiple class="form-control" name="driver[manualAuto]" id="manualAuto" value="<%= driver.manualAuto %>">
+        <option>Manual</option>
+        <option>Auto</option>
+      </select>
+
+      <label for="driverRanks">דרגות רישיון</label>
+      <select multiple class="form-control" name="driver[driverRanks]" id="driverRanks"
+        value="<%= driver.driverRanks %>">
+        <option>A2</option>
+        <option>A1</option>
+        <option>A</option>
+        <option>B</option>
+        <option>C1</option>
+        <option>C</option>
+        <option>D</option>
+        <option>D1</option>
+        <option>D2</option>
+        <option>D3</option>
+        <option>E</option>
+        <option>1</option>
+      </select>
+      <br>
+      <button type="submit" class="btn btn-secondary btn-lg btn-block">עדכן</button>
+    </div>
+  </form>
+  <%- include("../partials/footer"); -%>

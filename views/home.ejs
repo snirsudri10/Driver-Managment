@@ -1,0 +1,28 @@
+<%- include("partials/header"); -%>
+
+
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4 " style="text-align:center;" >ניהול טייסות</h1>
+  </div>
+</div>
+
+<div class="center container">
+  <a role="button" class="btn btn-info" href="/userHandle/register/registerSuperManager" style="color: white; text-decoration: none; width: 100%;">הוספת מנהל מערכת</a>
+  &nbsp;
+
+  <a role="button" href="squadron/createSquadrons" class="btn btn-info" style="width: 100%;">יצירת טייסת</a>
+</div>
+
+<br>
+
+<div>
+  <% squadrons.forEach(function(squadron){ %>
+    <a href="/squadron/<%=squadron.id%>" role="button" class="btn btn-info btn-lg btn-block" style="padding: 3rem 5rem;"> <%= squadron.name %> </a>
+  <% }); %>
+</div>
+
+
+
+
+<%- include("partials/footer"); -%>

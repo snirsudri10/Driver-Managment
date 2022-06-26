@@ -1,0 +1,36 @@
+<%- include("../partials/header"); -%>
+
+<div class="jumbotron jumbotron-fluid"">
+    <div class="container">
+      <h1 class="display-4 " style="text-align:center;" ><a href="/squadron/<%= squadronId %>/managerMode" style="text-decoration: none;color: #212529;">מצב מנהל טייסת</a></h1>
+    </div>
+</div>
+
+<br>
+
+<table class="table table-bordered" dir="rtl">
+  <thead>
+    <tr style="text-align: center;">
+      <th scope="col">שם משתמש</th>
+      <th scope="col">רמת גישה</th>
+      <th scope="col">ערוך פרטים</th>
+      <th scope="col">מחק</th>
+    </tr>
+  </thead>
+  <tbody dir="rtl">
+    <% var i = 1; %>
+    <% users.forEach(function(user){ %>
+      <tr style="text-align: center;">
+        <td><%= user.username %></td>
+        <td><%= user.accessLvl %></td>
+        <td><a href="/userHandle/editUser/<%=user.id%>/<%=squadronId%>" role="button" class="btn btn-primary">ערוך </a></td>
+        <td><form onsubmit="return confirm('האם אתה בטוח שאתה רוצה למחוק את המשתמש?')"  action="/userHandle/deleteUser/<%=user.id%>/<%=squadronId%>?_method=DELETE" method="post"><button type="submit" role="button" class="btn btn-danger">מחק משתמש </button></form></td>
+      </tr>
+      <% i++ %>
+    <% }); %>
+  </tbody>
+</table>
+
+
+
+<%- include("../partials/footer"); -%>

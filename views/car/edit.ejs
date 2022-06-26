@@ -1,0 +1,95 @@
+<%- include("../partials/header"); -%>
+
+<div class="jumbotron jumbotron-fluid" style="margin-bottom: 0px;">
+    <div class="container">
+      <h1 class="display-4 " style="text-align:center;" >עדכן את הרכב</h1>
+    </div>
+  </div>
+
+    <form action="/car/update/<%=car.id%>/<%=squadronId%>?_method=PUT" method="post" dir="rtl">
+        <div class="form-group">
+            <br>
+            <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">בעל הרכב</span>
+                <input value="<%=car.carOwner%>" required type="text" name="car[carOwner]" class="form-control"
+                    id="carOwner" placeholder="בעל הרכב">
+            </div>
+            <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">סוג הרכב </span>
+                <input value="<%=car.carType%>" required type="text" name="car[carType]" class="form-control"
+                    id="carType" placeholder="סוג הרכב">
+            </div>
+
+            <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">מספר רכב </span>
+                <input value="<%=car.numberPlate%>" required pattern="[0-9]*" inputmode="numeric" minlength="7"
+                    maxlength="8" type="text" name="car[numberPlate]" class="form-control" id="numberPlate"
+                    placeholder="מספר רכב">
+            </div>
+
+            <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">תאריך לטסט </span>
+                <input value="<%=car.annualTest%>" required type="date" name="car[annualTest]" class="form-control"
+                    id="annualTest">
+            </div>
+
+            <div class="input-group-prepend"  style="margin-bottom: 0.5rem;">
+                <span class="input-group-text" id="basic-addon1">ביקורת חורף</span>
+                <select id="dCheck" name="car[winterCheck]" class="form-control">
+                    <% if(car.winterCheck){ %>{
+                        <option value="true">נעשה</option>
+                        <option value="false">לא נעשה</option>
+                    <%}else{%>
+                        <option value="false">לא נעשה</option>
+                        <option value="true">נעשה</option>
+                    <%}%>
+                </select>
+            </div>
+
+            <% if(car.eachEveryMonths==null){ %>
+                <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                    <span class="input-group-text" id="basic-addon1">קילומטרים </span>
+                    <input value="<%=car.kilometers%>" type="number" min="0" name="car[kilometers]" class="form-control" id="kilometers" placeholder="קילומטרים">  
+                  </div>
+  
+                  <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                    <span class="input-group-text" id="basic-addon1">טיפול לקילומטר </span>
+                    <input value="<%=car.eachEveryKilometer%>" type="number" min="0" name="car[eachEveryKilometer]" class="form-control" id="eachEveryKilometers" placeholder="כל כמה קילומטרים מתרחש טיפול?">  
+                  </div>
+                <%}else{ %>
+                    <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                        <span class="input-group-text" id="basic-addon1">טופל בתאריך </span>
+                        <input value="<%=car.monthChecked%>" id="monthChecked" name="car[monthChecked]" class="form-control" type="date">
+                      </div>
+      
+                      <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                        <span class="input-group-text" id="basic-addon1">הטיפול יתבצע כל </span>
+                        <input value="<%=car.eachEveryMonths%>" id="eachEveryMonths" name="car[eachEveryMonths]"  class="form-control" type="number">
+                        <span class="input-group-text" id="basic-addon1">חודשים </span>
+                      </div>
+                <% }%>
+
+                <div class="input-group-prepend"  style="margin-bottom: 0.5rem;">
+                    <span class="input-group-text" id="basic-addon1">טיפול קילומטרים/שעות</span>
+                    <select id="dCheck" name="car[doneCheck]" class="form-control">
+                        <% if(car.doneCheck){ %>{
+                            <option value="true">נעשה</option>
+                            <option value="false">לא נעשה</option>
+                        <%}else{%>
+                            <option value="false">לא נעשה</option>
+                            <option value="true">נעשה</option>
+                        <%}%>
+                    </select>
+                </div>
+
+                <div class="input-group-prepend" style="margin-bottom: 0.5rem;">
+                    <span class="input-group-text" id="basic-addon1">הערות על הרכב </span>
+                    <textarea class="form-control" name="car[notes]" id="exampleFormControlTextarea1"
+                        rows="3"><%=car.notes%></textarea>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">עדכן</button>
+        </div>
+    </form>
+
+    <%- include("../partials/footer"); -%>
